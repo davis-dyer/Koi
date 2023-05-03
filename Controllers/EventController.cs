@@ -1,43 +1,82 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
+using System;
+using System.Security.Claims;
+using Koi.Models;
+using Koi.Repositories;
 
 namespace Koi.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class EventController : ControllerBase
     {
-        // GET: api/<EventController>
+        private readonly IEventRepository _eventRepository;
+        private readonly IUserRepository _userRepository;
+        public EventController(IEventRepository postRepository, IUserRepository userProfileRepository)
+        {
+            _eventRepository = postRepository;
+            _userRepository = userProfileRepository;
+        }
+
+        [Authorize]
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+
+            return Ok(_eventRepository.GetAll());
         }
 
-        // GET api/<EventController>/5
+        [Authorize]
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult GetEventById(int id)
         {
-            return "value";
+            var post = _eventRepository.GetById(id);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            return Ok(post);
         }
 
-        // POST api/<EventController>
+        [Authorize]
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post(Event evt)
         {
+            User user = GetCurrentUserProfile();
+
+            evt.CreatedAt = DateTime.Now;
+            evt.UserId = user.Id;
+            _eventRepository.Add(evt);
+            return CreatedAtAction(
+                nameof(GetEventById), new { evt.Id }, evt);
         }
 
-        // PUT api/<EventController>/5
+        private User GetCurrentUserProfile()
+        {
+            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _userRepository.GetByFirebaseUserId(firebaseUserId);
+        }
+
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(int id, Event evt)
         {
+            if (id != evt.Id)
+            {
+                return BadRequest();
+            }
+
+            _eventRepository.Edit(evt);
+            return NoContent();
         }
 
-        // DELETE api/<EventController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            _eventRepository.Delete(id);
+            return NoContent();
         }
     }
 }

@@ -1,57 +1,73 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Koi.Models;
+using Koi.Utils;
+using Koi.Repositories;
+using Microsoft.Extensions.Hosting;
 
 namespace Koi.Repositories
 {
-    public class EventRepository
+    public class EventRepository : BaseRepository, IEventRepository
     {
-        private readonly string _connectionString;
-        public KoiRepository(IConfiguration configuration)
-        {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
-        }
+        public EventRepository(IConfiguration configuration) : base(configuration) { }
 
-        private SqlConnection Connection
-        {
-            get { return new SqlConnection(_connectionString); }
-        }
-
-        public List<BeanVariety> GetAll()
+        public List<Event> GetAll()
         {
             using (var conn = Connection)
             {
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT Id, [Name], Region, Notes FROM BeanVariety;";
+                    cmd.CommandText = @"
+               SELECT e.Id, e.Title, e.Location, e.EventDate, e.Description, e.CreatedAt, e.LocationId, e.GroupId, e.UserId,
+                      u.FirebaseUserId, u.FName, u.LName, u.Email, u.CreateDateTime AS UserProfileDateCreated
+                 FROM Event e
+                      JOIN User u ON e.UserId = u.Id
+                WHERE e.EventDate <= SYSDATETIME()
+             ORDER BY e.EventDate DESC
+            ";
+
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        var varieties = new List<BeanVariety>();
+
+                        var events = new List<Event>();
                         while (reader.Read())
                         {
-                            var variety = new BeanVariety()
+                            events.Add(new Event()
                             {
-                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                                Name = reader.GetString(reader.GetOrdinal("Name")),
-                                Region = reader.GetString(reader.GetOrdinal("Region")),
-                            };
-                            if (!reader.IsDBNull(reader.GetOrdinal("Notes")))
-                            {
-                                variety.Notes = reader.GetString(reader.GetOrdinal("Notes"));
-                            }
-                            varieties.Add(variety);
+                                Id = DbUtils.GetInt(reader, "Id"),
+                                Title = DbUtils.GetString(reader, "Title"),
+                                Location = DbUtils.GetString(reader, "Location"),
+                                EventDate = DbUtils.GetDateTime(reader, "EventDate"),
+                                Description = DbUtils.GetString(reader, "Description"),
+                                CreatedAt = DbUtils.GetDateTime(reader, "CreatedAt"),
+                                LocationId = DbUtils.GetInt(reader, "LocationId"),
+                                GroupId = DbUtils.GetInt(reader, "GroupId"),
+                                UserId = DbUtils.GetInt(reader, "UserId"),
+                                User = new User()
+                                {
+                                    Id = DbUtils.GetInt(reader, "UserId"),
+                                    FirebaseUserId = DbUtils.GetString(reader, "FireBaseUserId"),
+                                    LName = DbUtils.GetString(reader, "LName"),
+                                    FName = DbUtils.GetString(reader, "FName"),
+                                    Email = DbUtils.GetString(reader, "Email"),
+                                    CreateDateTime = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
+                                },
+                            });
                         }
 
-                        return varieties;
+                        return events;
                     }
                 }
             }
         }
 
-        public BeanVariety Get(int id)
+
+
+        public Event GetById(int id)
         {
             using (var conn = Connection)
             {
@@ -59,35 +75,48 @@ namespace Koi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT Id, [Name], Region, Notes 
-                          FROM BeanVariety
-                         WHERE Id = @id;";
-                    cmd.Parameters.AddWithValue("@id", id);
-
+               SELECT e.Id, e.Title, e.Location, e.EventDate, e.Description, e.CreatedAt, e.LocationId, e.GroupId, e.UserId,
+                      u.FirebaseUserId, u.FName, u.LName, u.Email, u.CreateDateTime AS UserProfileDateCreated
+                 FROM Event e
+                      JOIN User u ON e.UserId = u.Id
+                 WHERE p.Id = @Id";
+                    DbUtils.AddParameter(cmd, "@Id", id);
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        BeanVariety variety = null;
+                        Event evt = null;
                         if (reader.Read())
                         {
-                            variety = new BeanVariety()
+                            evt = new Event()
                             {
-                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                                Name = reader.GetString(reader.GetOrdinal("Name")),
-                                Region = reader.GetString(reader.GetOrdinal("Region")),
-                            };
-                            if (!reader.IsDBNull(reader.GetOrdinal("Notes")))
-                            {
-                                variety.Notes = reader.GetString(reader.GetOrdinal("Notes"));
-                            }
+                                Id = DbUtils.GetInt(reader, "Id"),
+                                Title = DbUtils.GetString(reader, "Title"),
+                                Location = DbUtils.GetString(reader, "Location"),
+                                EventDate = DbUtils.GetDateTime(reader, "EventDate"),
+                                Description = DbUtils.GetString(reader, "Description"),
+                                CreatedAt = DbUtils.GetDateTime(reader, "CreatedAt"),
+                                LocationId = DbUtils.GetInt(reader, "LocationId"),
+                                GroupId = DbUtils.GetInt(reader, "GroupId"),
+                                UserId = DbUtils.GetInt(reader, "UserId"),
+                                User = new User()
+                                {
+                                    Id = DbUtils.GetInt(reader, "UserId"),
+                                    FirebaseUserId = DbUtils.GetString(reader, "FireBaseUserId"),
+                                    LName = DbUtils.GetString(reader, "LName"),
+                                    FName = DbUtils.GetString(reader, "FName"),
+                                    Email = DbUtils.GetString(reader, "Email"),
+                                    CreateDateTime = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
+                                },
+                            }; 
                         }
 
-                        return variety;
+                        return evt;
                     }
                 }
             }
         }
 
-        public void Add(BeanVariety variety)
+
+        public List<Event> GetByUserId(string firebaseUserId)
         {
             using (var conn = Connection)
             {
@@ -95,49 +124,121 @@ namespace Koi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO BeanVariety ([Name], Region, Notes)
+               SELECT e.Id, e.Title, e.Location, e.EventDate, e.Description, e.CreatedAt, e.LocationId, e.GroupId, e.UserId,
+                      u.FirebaseUserId, u.FName, u.LName, u.Email, u.CreateDateTime AS UserProfileDateCreated
+                 FROM Event e
+                      JOIN User u ON e.UserId = u.Id
+                 WHERE e.CreatedAt <= SYSDATETIME() AND u.FireBaseUserId = @firebaseUserId
+             ORDER BY e.CreatedAt DESC";
+
+                    DbUtils.AddParameter(cmd, "@FirebaseUserId", firebaseUserId);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        var events = new List<Event>();
+                        while (reader.Read())
+                        {
+                            events.Add(new Event()
+                            {
+                                Id = DbUtils.GetInt(reader, "Id"),
+                                Title = DbUtils.GetString(reader, "Title"),
+                                Location = DbUtils.GetString(reader, "Location"),
+                                EventDate = DbUtils.GetDateTime(reader, "EventDate"),
+                                Description = DbUtils.GetString(reader, "Description"),
+                                CreatedAt = DbUtils.GetDateTime(reader, "CreatedAt"),
+                                LocationId = DbUtils.GetInt(reader, "LocationId"),
+                                GroupId = DbUtils.GetInt(reader, "GroupId"),
+                                UserId = DbUtils.GetInt(reader, "UserId"),
+                                User = new User()
+                                {
+                                    Id = DbUtils.GetInt(reader, "UserId"),
+                                    FirebaseUserId = DbUtils.GetString(reader, "FireBaseUserId"),
+                                    LName = DbUtils.GetString(reader, "LName"),
+                                    FName = DbUtils.GetString(reader, "FName"),
+                                    Email = DbUtils.GetString(reader, "Email"),
+                                    CreateDateTime = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
+                                },
+                            });
+                        }
+
+                        return events;
+                    }
+                }
+            }
+        }
+
+        public void Add(Event evt)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        INSERT INTO Event (
+                        Title,
+                        Location,
+                        EventDate,
+                        Description,
+                        CreatedAt,
+                        LocationId,
+                        GroupId,
+                        UserId
+                        )
+                        
                         OUTPUT INSERTED.ID
-                        VALUES (@name, @region, @notes)";
-                    cmd.Parameters.AddWithValue("@name", variety.Name);
-                    cmd.Parameters.AddWithValue("@region", variety.Region);
-                    if (variety.Notes == null)
-                    {
-                        cmd.Parameters.AddWithValue("@notes", DBNull.Value);
-                    }
-                    else
-                    {
-                        cmd.Parameters.AddWithValue("@notes", variety.Notes);
-                    }
+	                    
+                        VALUES (
+                        @Title,
+                        @Location,
+                        @EventDate,
+                        @Description,
+                        @CreatedAt,
+                        @LocationId,
+                        @GroupId,
+                        @UserId)
+                    ";
 
-                    variety.Id = (int)cmd.ExecuteScalar();
+                    DbUtils.AddParameter(cmd, "@Title", evt.Title);
+                    DbUtils.AddParameter(cmd, "@Location", evt.Location);
+                    DbUtils.AddParameter(cmd, "@EventDate", evt.EventDate);
+                    DbUtils.AddParameter(cmd, "@Description", evt.Description);
+                    DbUtils.AddParameter(cmd, "@CreatedAt", evt.CreatedAt);
+                    DbUtils.AddParameter(cmd, "@LocationId", evt.LocationId);
+                    DbUtils.AddParameter(cmd, "@GroupId", evt.GroupId);
+                    DbUtils.AddParameter(cmd, "@UserId", evt.UserId);
+
+                    evt.Id = (int)cmd.ExecuteScalar();
                 }
             }
         }
-
-        public void Update(BeanVariety variety)
+        public void Edit(Event evt)
         {
             using (var conn = Connection)
             {
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"
-                        UPDATE BeanVariety 
-                           SET [Name] = @name, 
-                               Region = @region, 
-                               Notes = @notes
-                         WHERE Id = @id";
-                    cmd.Parameters.AddWithValue("@id", variety.Id);
-                    cmd.Parameters.AddWithValue("@name", variety.Name);
-                    cmd.Parameters.AddWithValue("@region", variety.Region);
-                    if (variety.Notes == null)
-                    {
-                        cmd.Parameters.AddWithValue("@notes", DBNull.Value);
-                    }
-                    else
-                    {
-                        cmd.Parameters.AddWithValue("@notes", variety.Notes);
-                    }
+                    cmd.CommandText = @"UPDATE Event
+                                       SET Title = @Title,
+                                           EventDate = @EventDate,
+                                           Description = @Description,
+                                           CreatedAt = @CreatedAt,
+                                           Location = @Location,
+                                           LocationId = @LocationId,
+                                           GroupId = @GroupId,
+                                           UserId = @UserId
+                                       WHERE Id = @Id";
+
+                    DbUtils.AddParameter(cmd, "@Title", evt.Title);
+                    DbUtils.AddParameter(cmd, "@Location", evt.Location);
+                    DbUtils.AddParameter(cmd, "@EventDate", evt.EventDate);
+                    DbUtils.AddParameter(cmd, "@Description", evt.Description);
+                    DbUtils.AddParameter(cmd, "@CreatedAt", evt.CreatedAt);
+                    DbUtils.AddParameter(cmd, "@LocationId", evt.LocationId);
+                    DbUtils.AddParameter(cmd, "@GroupId", evt.GroupId);
+                    DbUtils.AddParameter(cmd, "@UserId", evt.UserId);
+                    DbUtils.AddParameter(cmd, "@Id", evt.Id);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -151,9 +252,8 @@ namespace Koi.Repositories
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "DELETE FROM BeanVariety WHERE Id = @id";
-                    cmd.Parameters.AddWithValue("@id", id);
-
+                    cmd.CommandText = "DELETE FROM Event WHERE Id = @Id";
+                    DbUtils.AddParameter(cmd, "@id", id);
                     cmd.ExecuteNonQuery();
                 }
             }
