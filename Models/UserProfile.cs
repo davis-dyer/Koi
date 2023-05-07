@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Koi.Models
 {
-    public class User
+    public class UserProfile
     {
         public int Id { get; set; }
 

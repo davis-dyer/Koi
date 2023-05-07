@@ -25,7 +25,7 @@ namespace Koi.Repositories
                SELECT e.Id, e.Title, e.Location, e.EventDate, e.Description, e.CreatedAt, e.LocationId, e.GroupId, e.UserId,
                       u.FirebaseUserId, u.FName, u.LName, u.Email, u.CreateDateTime AS UserProfileDateCreated
                  FROM Event e
-                      JOIN User u ON e.UserId = u.Id
+                      JOIN UserProfile u ON e.UserId = u.Id
                 WHERE e.EventDate <= SYSDATETIME()
              ORDER BY e.EventDate DESC
             ";
@@ -47,7 +47,7 @@ namespace Koi.Repositories
                                 LocationId = DbUtils.GetInt(reader, "LocationId"),
                                 GroupId = DbUtils.GetInt(reader, "GroupId"),
                                 UserId = DbUtils.GetInt(reader, "UserId"),
-                                User = new User()
+                                User = new UserProfile()
                                 {
                                     Id = DbUtils.GetInt(reader, "UserId"),
                                     FirebaseUserId = DbUtils.GetString(reader, "FireBaseUserId"),
@@ -78,7 +78,7 @@ namespace Koi.Repositories
                SELECT e.Id, e.Title, e.Location, e.EventDate, e.Description, e.CreatedAt, e.LocationId, e.GroupId, e.UserId,
                       u.FirebaseUserId, u.FName, u.LName, u.Email, u.CreateDateTime AS UserProfileDateCreated
                  FROM Event e
-                      JOIN User u ON e.UserId = u.Id
+                      JOIN UserProfile u ON e.UserId = u.Id
                  WHERE p.Id = @Id";
                     DbUtils.AddParameter(cmd, "@Id", id);
                     using (SqlDataReader reader = cmd.ExecuteReader())
@@ -97,7 +97,7 @@ namespace Koi.Repositories
                                 LocationId = DbUtils.GetInt(reader, "LocationId"),
                                 GroupId = DbUtils.GetInt(reader, "GroupId"),
                                 UserId = DbUtils.GetInt(reader, "UserId"),
-                                User = new User()
+                                User = new UserProfile()
                                 {
                                     Id = DbUtils.GetInt(reader, "UserId"),
                                     FirebaseUserId = DbUtils.GetString(reader, "FireBaseUserId"),
@@ -127,7 +127,7 @@ namespace Koi.Repositories
                SELECT e.Id, e.Title, e.Location, e.EventDate, e.Description, e.CreatedAt, e.LocationId, e.GroupId, e.UserId,
                       u.FirebaseUserId, u.FName, u.LName, u.Email, u.CreateDateTime AS UserProfileDateCreated
                  FROM Event e
-                      JOIN User u ON e.UserId = u.Id
+                      JOIN UserProfile u ON e.UserId = u.Id
                  WHERE e.CreatedAt <= SYSDATETIME() AND u.FireBaseUserId = @firebaseUserId
              ORDER BY e.CreatedAt DESC";
 
@@ -148,7 +148,7 @@ namespace Koi.Repositories
                                 LocationId = DbUtils.GetInt(reader, "LocationId"),
                                 GroupId = DbUtils.GetInt(reader, "GroupId"),
                                 UserId = DbUtils.GetInt(reader, "UserId"),
-                                User = new User()
+                                User = new UserProfile()
                                 {
                                     Id = DbUtils.GetInt(reader, "UserId"),
                                     FirebaseUserId = DbUtils.GetString(reader, "FireBaseUserId"),

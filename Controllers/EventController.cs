@@ -45,7 +45,7 @@ namespace Koi.Controllers
         [HttpPost]
         public IActionResult Post(Event evt)
         {
-            User user = GetCurrentUserProfile();
+            UserProfile user = GetCurrentUserProfile();
 
             evt.CreatedAt = DateTime.Now;
             evt.UserId = user.Id;
@@ -54,7 +54,7 @@ namespace Koi.Controllers
                 nameof(GetEventById), new { evt.Id }, evt);
         }
 
-        private User GetCurrentUserProfile()
+        private UserProfile GetCurrentUserProfile()
         {
             var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             return _userRepository.GetByFirebaseUserId(firebaseUserId);

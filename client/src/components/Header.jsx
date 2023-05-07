@@ -9,7 +9,7 @@ import { CgProfile } from 'react-icons/cg'
 //import { actionType } from '../context/reducer'
 import { MdLogout } from 'react-icons/md'
 
-const Header = () => {
+const Header = ( {isLoggedIn} ) => {
 
     const [isMenu, setIsMenu] = useState(false)
 
@@ -27,7 +27,7 @@ const Header = () => {
 
 
     return (
-        <header className="fixed z-50 w-screen p-3 md:p-4 md:px-12 bg-blue-100">
+        <header className="fixed z-50 w-screen p-3 md:p-4 md:px-12 bg-blue-100 border border-black">
             <div className='hidden md:flex w-full h-full items-center justify-between'>
                 <Link to={'/'} className='flex items-center gap-2'>
                     <img src={Logo} alt="Logo" className='w-20 object-cover' />

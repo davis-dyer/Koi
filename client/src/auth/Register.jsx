@@ -29,8 +29,10 @@ export default function Register() {
   };
 
   return (
+    <div className="mt-10">
+
     <Form onSubmit={registerClick}>
-      <fieldset>
+      <fieldset className="">
         <FormGroup>
           <Label htmlFor="firstName">First Name</Label>
           <Input
@@ -61,7 +63,7 @@ export default function Register() {
             id="password"
             type="password"
             onChange={(e) => setPassword(e.target.value)}
-          />
+            />
         </FormGroup>
         <FormGroup>
           <Label for="confirmPassword">Confirm Password</Label>
@@ -69,12 +71,13 @@ export default function Register() {
             id="confirmPassword"
             type="password"
             onChange={(e) => setConfirmPassword(e.target.value)}
-          />
+            />
         </FormGroup>
         <FormGroup>
           <Button>Register</Button>
         </FormGroup>
       </fieldset>
     </Form>
+    </div>
   );
 }

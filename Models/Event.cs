@@ -14,6 +14,6 @@ namespace Koi.Models
         public int LocationId { get; set; }
         public int GroupId { get; set; }
         public int UserId { get; set; }
-        public User User { get; set; }
+        public UserProfile User { get; set; }
     }
 }

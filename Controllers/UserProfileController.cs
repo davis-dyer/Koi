@@ -11,10 +11,10 @@ namespace Koi.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserProfileController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
-        public UserController(IUserRepository userProfileRepository)
+        public UserProfileController(IUserRepository userProfileRepository)
         {
             _userRepository = userProfileRepository;
         }
@@ -28,7 +28,7 @@ namespace Koi.Controllers
 
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, User user)
+        public IActionResult Put(int id, UserProfile user)
         {
             if (id != user.Id)
             {
@@ -47,14 +47,9 @@ namespace Koi.Controllers
         }
 
         [HttpGet("{firebaseUserId}")]
-        public IActionResult GetByFirebaseUserId(string firebaseUserId)
+        public IActionResult GetUserProfile(string firebaseUserId)
         {
-            var userProfile = _userRepository.GetByFirebaseUserId(firebaseUserId);
-            if (userProfile == null)
-            {
-                return NotFound();
-            }
-            return Ok(userProfile);
+            return Ok(_userRepository.GetByFirebaseUserId(firebaseUserId));
         }
 
         [HttpGet("Me")]
@@ -80,17 +75,7 @@ namespace Koi.Controllers
             return Ok();
         }
 
-        [HttpPost]
-        public IActionResult Register(User userProfile)
-        {
-            // All newly registered users start out as a "user" user type (i.e. they are not admins)
-            userProfile.CreateDateTime = DateTime.Now;
-            _userRepository.Add(userProfile);
-            return CreatedAtAction(
-                nameof(GetByFirebaseUserId), new { firebaseUserId = userProfile.FirebaseUserId }, userProfile);
-        }
-
-        private User GetCurrentUserProfile()
+        private UserProfile GetCurrentUserProfile()
         {
             var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             return _userRepository.GetByFirebaseUserId(firebaseUserId);

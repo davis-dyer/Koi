@@ -3,8 +3,10 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import ApplicationViews from "./views/ApplicationViews";
-import { BrowserRouter } from "react-router-dom";
 import { onLoginStatusChange, me } from "./modules/authManager";
+import { Route, Routes } from 'react-router-dom';
+import Footer from './components/Footer';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
@@ -27,13 +29,15 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Header isLoggedIn={isLoggedIn} userProfile={userProfile} />
-        <ApplicationViews isLoggedIn={isLoggedIn} />
-          <p className='border border-black'>Hello World</p>
-      </BrowserRouter>
-    </div>
+    <Router>
+        <div className='w-screen h-auto flex flex-col'>
+          <Header isLoggedIn={isLoggedIn} userProfile={userProfile} className='' />
+          <div className='mt-14 md:mt-20 w-full'>
+            <ApplicationViews isLoggedIn={isLoggedIn} />
+          </div>
+          <Footer />
+        </div>
+    </Router>
   );
 }
 

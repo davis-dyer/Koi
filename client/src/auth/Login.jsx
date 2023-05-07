@@ -17,6 +17,8 @@ export default function Login() {
   };
 
   return (
+    <div className="mt-10">
+
     <Form onSubmit={loginSubmit}>
       <fieldset>
         <FormGroup>
@@ -44,5 +46,6 @@ export default function Login() {
         </em>
       </fieldset>
     </Form>
+    </div>
   );
 }

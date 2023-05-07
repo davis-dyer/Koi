@@ -5,11 +5,11 @@ namespace Koi.Repositories
 {
     public interface IUserRepository
     {
-        void Add(User user);
+        void Add(UserProfile user);
         void Delete(int id);
-        List<User> GetAll();
-        User GetById(int id);
-        void Update(User user);
-        public User GetByFirebaseUserId(string firebaseUserId);
+        List<UserProfile> GetAll();
+        UserProfile GetById(int id);
+        void Update(UserProfile user);
+        UserProfile GetByFirebaseUserId(string firebaseUserId);
     }
 }

@@ -1,17 +1,17 @@
-﻿using Koi.Repositories;
-using Koi.Utils;
+﻿using Koi.Utils;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
-using System.Linq;
 using Koi.Models;
+using System.Reflection.Emit;
+using System.Reflection.PortableExecutable;
 
 namespace Koi.Repositories
 {
     public class UserRepository : BaseRepository, IUserRepository
     {
         public UserRepository(IConfiguration configuration) : base(configuration) { }
-        public List<User> GetAll()
+        public List<UserProfile> GetAll()
         {
             using (var conn = Connection)
             {
@@ -19,14 +19,14 @@ namespace Koi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"SELECT Id, FName, LName, Email, ZipCode, CreateDateTime
-                                        FROM User";
+                                        FROM UserProfile";
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        var users = new List<User>();
+                        var users = new List<UserProfile>();
                         while (reader.Read())
                         {
-                            users.Add(new User()
+                            users.Add(new UserProfile()
                             {
                                 Id = DbUtils.GetInt(reader, "Id"),
                                 FName = DbUtils.GetString(reader, "FName"),
@@ -42,7 +42,7 @@ namespace Koi.Repositories
             }
         }
 
-        public User GetById(int id)
+        public UserProfile GetById(int id)
         {
             using (var conn = Connection)
             {
@@ -50,17 +50,17 @@ namespace Koi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"SELECT Id, FName, LName, Email, ZipCode, CreateDateTime
-                                        FROM User
+                                        FROM UserProfile
                                         WHERE Id = @Id";
 
                     DbUtils.AddParameter(cmd, "@Id", id);
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        User user = null;
+                        UserProfile userProfile = null;
                         if (reader.Read())
                         {
-                            user = new User()
+                            userProfile = new UserProfile()
                             {
                                 Id = DbUtils.GetInt(reader, "Id"),
                                 FName = DbUtils.GetString(reader, "FName"),
@@ -70,43 +70,43 @@ namespace Koi.Repositories
                                 CreateDateTime = DbUtils.GetDateTime(reader, "CreateDateTime")
                             };
                         }
-                        return user;
+                        return userProfile;
                     }
                 }
             }
         }
 
-        public void Add(User user)
+        public void Add(UserProfile userProfile)
         {
             using (var conn = Connection)
             {
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO User (FName, LName, Email, ZipCode, CreateDateTime, FirebaseUserId)
+                    cmd.CommandText = @"INSERT INTO UserProfile (FName, LName, Email, ZipCode, CreateDateTime, FirebaseUserId)
                                         OUTPUT INSERTED.ID
                                         VALUES (@fname, @lname, @email, @zipcode, @createdatetime, @firebaseUserId)";
 
-                    DbUtils.AddParameter(cmd, "@fname", user.FName);
-                    DbUtils.AddParameter(cmd, "@lname", user.LName);
-                    DbUtils.AddParameter(cmd, "@email", user.Email);
-                    DbUtils.AddParameter(cmd, "@zipcode", user.ZipCode);
-                    DbUtils.AddParameter(cmd, "@createdatetime", user.CreateDateTime);
-                    DbUtils.AddParameter(cmd, "@firebaseUserId", user.FirebaseUserId);
+                    DbUtils.AddParameter(cmd, "@fname", userProfile.FName);
+                    DbUtils.AddParameter(cmd, "@lname", userProfile.LName);
+                    DbUtils.AddParameter(cmd, "@email", userProfile.Email);
+                    DbUtils.AddParameter(cmd, "@zipcode", userProfile.ZipCode);
+                    DbUtils.AddParameter(cmd, "@createdatetime", userProfile.CreateDateTime);
+                    DbUtils.AddParameter(cmd, "@firebaseUserId", userProfile.FirebaseUserId);
 
-                    user.Id = (int)cmd.ExecuteScalar();
+                    userProfile.Id = (int)cmd.ExecuteScalar();
                 }
             }
         }
 
-        public void Update(User user)
+        public void Update(UserProfile userProfile)
         {
             using (var conn = Connection)
             {
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"UPDATE User 
+                    cmd.CommandText = @"UPDATE UserProfile 
                                             SET FName = @fname,
                                             LName = @lname,
                                             Email = @email,
@@ -114,12 +114,12 @@ namespace Koi.Repositories
                                             CreateDateTime = @createdatetime
                                         WHERE Id = @id";
 
-                    DbUtils.AddParameter(cmd, "@fname", user.FName);
-                    DbUtils.AddParameter(cmd, "@lname", user.LName);
-                    DbUtils.AddParameter(cmd, "@email", user.Email);
-                    DbUtils.AddParameter(cmd, "@zipcode", user.ZipCode);
-                    DbUtils.AddParameter(cmd, "@createdatetime", user.CreateDateTime);
-                    DbUtils.AddParameter(cmd, "@Id", user.Id);
+                    DbUtils.AddParameter(cmd, "@fname", userProfile.FName);
+                    DbUtils.AddParameter(cmd, "@lname", userProfile.LName);
+                    DbUtils.AddParameter(cmd, "@email", userProfile.Email);
+                    DbUtils.AddParameter(cmd, "@zipcode", userProfile.ZipCode);
+                    DbUtils.AddParameter(cmd, "@createdatetime", userProfile.CreateDateTime);
+                    DbUtils.AddParameter(cmd, "@Id", userProfile.Id);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -134,14 +134,14 @@ namespace Koi.Repositories
                 {
                     cmd.CommandText = @"DELETE FROM Event WHERE UserId = @Id;
                                         DELETE FROM UserGroup WHERE UserId = @Id; 
-                                        DELETE FROM User WHERE Id = @Id";
+                                        DELETE FROM UserProfile WHERE Id = @Id";
                     DbUtils.AddParameter(cmd, "@Id", id);
                     cmd.ExecuteNonQuery();
                 }
             }
         }
 
-        public User GetByFirebaseUserId(string firebaseUserId)
+        public UserProfile GetByFirebaseUserId(string firebaseUserId)
         {
             using (var conn = Connection)
             {
@@ -149,30 +149,35 @@ namespace Koi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"SELECT Id, FName, LName, Email, ZipCode, CreateDateTime, FirebaseUserId
-                                        FROM User
+                                        FROM UserProfile
                                         WHERE FirebaseUserId = @firebaseUserId";
                     DbUtils.AddParameter(cmd, "@firebaseUserId", firebaseUserId);
-
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    UserProfile userProfile = null;
+                    var reader = cmd.ExecuteReader();
+                    if (reader.Read())
                     {
-                        User user = null;
-                        if (reader.Read())
+                        if (userProfile == null)
                         {
-                            user = new User()
-                            {
-                                Id = DbUtils.GetInt(reader, "Id"),
-                                FName = DbUtils.GetString(reader, "FName"),
-                                LName = DbUtils.GetString(reader, "LName"),
-                                Email = DbUtils.GetString(reader, "Email"),
-                                ZipCode = DbUtils.GetString(reader, "ZipCode"),
-                                CreateDateTime = DbUtils.GetDateTime(reader, "CreateDateTime"),
-                                FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId")
-                            };
+                            userProfile = NewUserFromReader(reader);
                         }
-                        return user;
                     }
+                    return userProfile;
                 }
             }
+        }
+
+        private UserProfile NewUserFromReader(SqlDataReader reader)
+        {
+            return new UserProfile()
+            {
+                Id = DbUtils.GetInt(reader, "Id"),
+                FName = DbUtils.GetString(reader, "FName"),
+                LName = DbUtils.GetString(reader, "LName"),
+                Email = DbUtils.GetString(reader, "Email"),
+                ZipCode = DbUtils.GetString(reader, "ZipCode"),
+                CreateDateTime = DbUtils.GetDateTime(reader, "CreateDateTime"),
+                FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId")
+            };
         }
     }
 }

@@ -1,7 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/auth";
 
-const _apiUrl = "/api/user";
+const _apiUrl = "/api/UserProfile";
 
 export const getUserDetails = (firebaseUUID) => {
   return getToken().then(token => {

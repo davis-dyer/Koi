@@ -5,15 +5,13 @@ import Register from "../auth/Register";
 //import PostList from "./post/PostList";
 import MainContainer from "../components/MainContainer";
 
-export default function ApplicationViews({ isLoggedIn, role }) {
+export default function ApplicationViews({ isLoggedIn }) {
   return (
     <main>
       <Routes>
-        <Route path="/" element={<MainContainer />}>
-          {/* <Route
-            index
-            element={isLoggedIn ? <PostList /> : <Navigate to="/login" />}
-          /> */}
+        <Route path="/">
+          <Route index element={isLoggedIn ? <MainContainer /> : <Navigate to="/login" /> } />
+          <Route path="home" element={<MainContainer />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           {/* <Route path="postDetails/:id" element={<PostDetails />} /> */}
