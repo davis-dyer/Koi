@@ -4,8 +4,6 @@ import "./App.css";
 import Header from "./components/Header";
 import ApplicationViews from "./views/ApplicationViews";
 import { onLoginStatusChange, me } from "./modules/authManager";
-import { Route, Routes } from 'react-router-dom';
-import Footer from './components/Footer';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 function App() {
@@ -35,7 +33,6 @@ function App() {
           <div className='mt-14 md:mt-20 w-full'>
             <ApplicationViews isLoggedIn={isLoggedIn} />
           </div>
-          <Footer />
         </div>
     </Router>
   );

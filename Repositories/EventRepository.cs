@@ -22,7 +22,7 @@ namespace Koi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-               SELECT e.Id, e.Title, e.Location, e.EventDate, e.Description, e.CreatedAt, e.LocationId, e.GroupId, e.UserId,
+               SELECT e.Id, e.Title, e.Location, e.EventDate, e.Description, e.CreatedAt, e.GroupId, e.UserId,
                       u.FirebaseUserId, u.FName, u.LName, u.Email, u.CreateDateTime AS UserProfileDateCreated
                  FROM Event e
                       JOIN UserProfile u ON e.UserId = u.Id
@@ -44,7 +44,6 @@ namespace Koi.Repositories
                                 EventDate = DbUtils.GetDateTime(reader, "EventDate"),
                                 Description = DbUtils.GetString(reader, "Description"),
                                 CreatedAt = DbUtils.GetDateTime(reader, "CreatedAt"),
-                                LocationId = DbUtils.GetInt(reader, "LocationId"),
                                 GroupId = DbUtils.GetInt(reader, "GroupId"),
                                 UserId = DbUtils.GetInt(reader, "UserId"),
                                 User = new UserProfile()
@@ -75,7 +74,7 @@ namespace Koi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-               SELECT e.Id, e.Title, e.Location, e.EventDate, e.Description, e.CreatedAt, e.LocationId, e.GroupId, e.UserId,
+               SELECT e.Id, e.Title, e.Location, e.EventDate, e.Description, e.CreatedAt, e.GroupId, e.UserId,
                       u.FirebaseUserId, u.FName, u.LName, u.Email, u.CreateDateTime AS UserProfileDateCreated
                  FROM Event e
                       JOIN UserProfile u ON e.UserId = u.Id
@@ -94,7 +93,6 @@ namespace Koi.Repositories
                                 EventDate = DbUtils.GetDateTime(reader, "EventDate"),
                                 Description = DbUtils.GetString(reader, "Description"),
                                 CreatedAt = DbUtils.GetDateTime(reader, "CreatedAt"),
-                                LocationId = DbUtils.GetInt(reader, "LocationId"),
                                 GroupId = DbUtils.GetInt(reader, "GroupId"),
                                 UserId = DbUtils.GetInt(reader, "UserId"),
                                 User = new UserProfile()
@@ -124,7 +122,7 @@ namespace Koi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-               SELECT e.Id, e.Title, e.Location, e.EventDate, e.Description, e.CreatedAt, e.LocationId, e.GroupId, e.UserId,
+               SELECT e.Id, e.Title, e.Location, e.EventDate, e.Description, e.CreatedAt, e.GroupId, e.UserId,
                       u.FirebaseUserId, u.FName, u.LName, u.Email, u.CreateDateTime AS UserProfileDateCreated
                  FROM Event e
                       JOIN UserProfile u ON e.UserId = u.Id
@@ -145,7 +143,6 @@ namespace Koi.Repositories
                                 EventDate = DbUtils.GetDateTime(reader, "EventDate"),
                                 Description = DbUtils.GetString(reader, "Description"),
                                 CreatedAt = DbUtils.GetDateTime(reader, "CreatedAt"),
-                                LocationId = DbUtils.GetInt(reader, "LocationId"),
                                 GroupId = DbUtils.GetInt(reader, "GroupId"),
                                 UserId = DbUtils.GetInt(reader, "UserId"),
                                 User = new UserProfile()
@@ -181,7 +178,6 @@ namespace Koi.Repositories
                         EventDate,
                         Description,
                         CreatedAt,
-                        LocationId,
                         GroupId,
                         UserId
                         )
@@ -194,7 +190,6 @@ namespace Koi.Repositories
                         @EventDate,
                         @Description,
                         @CreatedAt,
-                        @LocationId,
                         @GroupId,
                         @UserId)
                     ";
@@ -204,7 +199,6 @@ namespace Koi.Repositories
                     DbUtils.AddParameter(cmd, "@EventDate", evt.EventDate);
                     DbUtils.AddParameter(cmd, "@Description", evt.Description);
                     DbUtils.AddParameter(cmd, "@CreatedAt", evt.CreatedAt);
-                    DbUtils.AddParameter(cmd, "@LocationId", evt.LocationId);
                     DbUtils.AddParameter(cmd, "@GroupId", evt.GroupId);
                     DbUtils.AddParameter(cmd, "@UserId", evt.UserId);
 
@@ -225,7 +219,6 @@ namespace Koi.Repositories
                                            Description = @Description,
                                            CreatedAt = @CreatedAt,
                                            Location = @Location,
-                                           LocationId = @LocationId,
                                            GroupId = @GroupId,
                                            UserId = @UserId
                                        WHERE Id = @Id";
@@ -235,7 +228,6 @@ namespace Koi.Repositories
                     DbUtils.AddParameter(cmd, "@EventDate", evt.EventDate);
                     DbUtils.AddParameter(cmd, "@Description", evt.Description);
                     DbUtils.AddParameter(cmd, "@CreatedAt", evt.CreatedAt);
-                    DbUtils.AddParameter(cmd, "@LocationId", evt.LocationId);
                     DbUtils.AddParameter(cmd, "@GroupId", evt.GroupId);
                     DbUtils.AddParameter(cmd, "@UserId", evt.UserId);
                     DbUtils.AddParameter(cmd, "@Id", evt.Id);

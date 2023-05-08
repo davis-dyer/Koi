@@ -4,6 +4,7 @@ import Login from "../auth/Login";
 import Register from "../auth/Register";
 //import PostList from "./post/PostList";
 import MainContainer from "../components/MainContainer";
+import EventContainer from "../pages/events/EventContainer";
 
 export default function ApplicationViews({ isLoggedIn }) {
   return (
@@ -14,6 +15,8 @@ export default function ApplicationViews({ isLoggedIn }) {
           <Route path="home" element={<MainContainer />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="events" element={<EventContainer />} />
+          
           {/* <Route path="postDetails/:id" element={<PostDetails />} /> */}
 
           {/* <Route path="userposts" element={isLoggedIn ? <UserPosts /> : <Navigate to="/login" />} />

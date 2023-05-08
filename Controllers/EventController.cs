@@ -15,9 +15,9 @@ namespace Koi.Controllers
     {
         private readonly IEventRepository _eventRepository;
         private readonly IUserRepository _userRepository;
-        public EventController(IEventRepository postRepository, IUserRepository userProfileRepository)
+        public EventController(IEventRepository eventRepository, IUserRepository userProfileRepository)
         {
-            _eventRepository = postRepository;
+            _eventRepository = eventRepository;
             _userRepository = userProfileRepository;
         }
 

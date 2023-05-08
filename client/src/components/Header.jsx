@@ -4,10 +4,9 @@ import Logo from '../assets/KOI.png'
 import { motion } from 'framer-motion'
 import Avatar from '../assets/avatar.png'
 import { FaSignInAlt } from 'react-icons/fa'
-//import { useStateValue } from '../context/StateProvider'
 import { CgProfile } from 'react-icons/cg'
-//import { actionType } from '../context/reducer'
 import { MdLogout } from 'react-icons/md'
+import { logout } from '../modules/authManager'
 
 const Header = ( {isLoggedIn} ) => {
 
@@ -15,11 +14,10 @@ const Header = ( {isLoggedIn} ) => {
 
     const navigate = useNavigate()
 
-    const localAllmanosUser = localStorage.getItem('allmanos_user')
-    const allmanosUserObject = JSON.parse(localAllmanosUser)
+    const toggle = () => setIsMenu(!isMenu);
 
     const login = async () => {
-        if (allmanosUserObject) {
+        if (isLoggedIn) {
             setIsMenu(!isMenu)
         }
     }
@@ -39,14 +37,11 @@ const Header = ( {isLoggedIn} ) => {
                         exit={{ opacity: 0, x: 200 }}
                         className='flex items-center gap-8'
                     >
-                        <Link to={'/posts'} className='text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer'>
-                            <li>Posts</li>
+                        <Link to={'/events'} className='text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer'>
+                            <p>Events</p>
                         </Link>
-                        <Link to={'/podcast'} className='text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer'>
-                            <li>Podcast</li>
-                        </Link>
-                        <Link to={'/community'} className='text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer'>
-                            <li>Community</li>
+                        <Link to={'/groups'} className='text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer'>
+                            <p>Groups</p>
                         </Link>
                         <Link to={'/about'} className='text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer'>
                             <li>About</li>
@@ -69,7 +64,7 @@ const Header = ( {isLoggedIn} ) => {
                                 exit={{ opacity: 0, scale: 0.6 }}
                                 className='w-40 bg-gray-50 showdow-xl rounded-lg flex flex-col absolute top-12 right-0'
                             >
-                                {allmanosUserObject && (
+                                {isLoggedIn && (
                                     <Link to={'/profile'}
                                         className="px-4 py-2 flex items-center gap-3 cursor-pointer hover:bg-slate-100 transition-all duration-100 ease-in-out text-textColor text-base"
                                         onClick={() => setIsMenu(false)}
@@ -78,10 +73,7 @@ const Header = ( {isLoggedIn} ) => {
                                 )}
                                 <Link to=''
                                     className='px-4 py-2 flex items-center gap-3 cursor-pointer hover:bg-slate-100 transition-all duration-100 ease-in-out text-textColor text-base'
-                                    onClick={() => {
-                                        localStorage.removeItem('allmanos_user')
-                                        navigate("/login", {replace: true})
-                                    }}
+                                    onClick={logout}
                                 >Logout <MdLogout />
                                 </Link>
                             </motion.div>
@@ -114,10 +106,10 @@ const Header = ( {isLoggedIn} ) => {
                             className='w-40 bg-gray-50 showdow-xl rounded-lg flex flex-col absolute top-12 right-0'
                         >
                             <ul className='flex flex-col'>
-                                <Link to={'/service'}>
+                                <Link to={'/events'}>
                                     <li className='text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer  hover:bg-slate-100 px-4 py-2'
                                         onClick={() => setIsMenu(false)}
-                                    >Posts</li>
+                                    >Events</li>
                                 </Link>
                                 <Link to={'/about'}>
                                     <li className='text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer  hover:bg-slate-100 px-4 py-2'
@@ -129,7 +121,7 @@ const Header = ( {isLoggedIn} ) => {
                                         onClick={() => setIsMenu(false)}
                                     >Contact</li>
                                 </Link>
-                                {allmanosUserObject && (
+                                {isLoggedIn && (
                                     <Link to={'profile'}>
                                         <li className='text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer  hover:bg-slate-100 px-4 py-2'
                                             onClick={() => setIsMenu(false)}
@@ -139,10 +131,7 @@ const Header = ( {isLoggedIn} ) => {
                             </ul>
                             <Link to=''
                                 className='px-4 py-2 flex items-center gap-3 cursor-pointer hover:bg-slate-100 transition-all duration-100 ease-in-out text-textColor text-base'
-                                onClick={() => {
-                                    localStorage.removeItem('allmanos_user')
-                                    navigate("/login", { replace: true })
-                                }}
+                                onClick={logout}
                             >Logout <MdLogout />
                             </Link>
                         </motion.div>

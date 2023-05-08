@@ -11,7 +11,6 @@ namespace Koi.Models
         public DateTime EventDate { get; set; }
         public string Description { get; set; }
         public DateTime CreatedAt { get; set; }
-        public int LocationId { get; set; }
         public int GroupId { get; set; }
         public int UserId { get; set; }
         public UserProfile User { get; set; }

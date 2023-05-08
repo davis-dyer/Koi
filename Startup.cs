@@ -32,6 +32,7 @@ namespace Koi
             services.AddTransient<IEventRepository, EventRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IGroupRepository, GroupRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
 
             var firebaseProjectId = Configuration.GetValue<string>("FirebaseProjectId");
             var googleTokenUrl = $"https://securetoken.google.com/{firebaseProjectId}";
