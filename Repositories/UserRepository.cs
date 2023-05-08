@@ -3,8 +3,6 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using Koi.Models;
-using System.Reflection.Emit;
-using System.Reflection.PortableExecutable;
 
 namespace Koi.Repositories
 {

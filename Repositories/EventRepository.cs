@@ -99,7 +99,7 @@ namespace Koi.Repositories
                                 UserId = DbUtils.GetInt(reader, "UserId"),
                                 User = new UserProfile()
                                 {
-                                    Id = DbUtils.GetInt(reader, "UserId"),
+                                    Id = DbUtils.GetInt(reader, "UserId"), 
                                     FirebaseUserId = DbUtils.GetString(reader, "FireBaseUserId"),
                                     LName = DbUtils.GetString(reader, "LName"),
                                     FName = DbUtils.GetString(reader, "FName"),
