@@ -22,13 +22,12 @@ namespace Koi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-               SELECT g.Id, g.GroupName, g.GroupDesc, g.CategoryId, c.Type
-                 FROM Group g
-                      JOIN Category c ON g.CategoryId = c.Id
-             ORDER BY g.GroupName DESC
-            ";
+               SELECT g.Id, g.GroupName, g.GroupDesc, g.CategoryId, g.UserId, u.FirebaseUserId, u.FName, u.LName, u.Email, u.CreateDateTime AS UserProfileDateCreated
+                 FROM [Group] g 
+                    LEFT JOIN UserProfile u ON g.UserId = u.Id
+                    ";
 
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    using ( SqlDataReader reader = cmd.ExecuteReader())
                     {
 
                         var groups = new List<Group>();
@@ -40,10 +39,14 @@ namespace Koi.Repositories
                                 GroupName = DbUtils.GetString(reader, "GroupName"),
                                 GroupDesc = DbUtils.GetString(reader, "GroupDesc"),
                                 CategoryId = DbUtils.GetInt(reader, "CategoryId"),
-                                Category = new Category()
+                                UserProf = new UserProfile()
                                 {
-                                    Id = DbUtils.GetInt(reader, "CategoryId"),
-                                    Type = DbUtils.GetString(reader, "Type"),
+                                    Id = DbUtils.GetInt(reader, "UserId"),
+                                    FirebaseUserId = DbUtils.GetString(reader, "FireBaseUserId"),
+                                    LName = DbUtils.GetString(reader, "LName"),
+                                    FName = DbUtils.GetString(reader, "FName"),
+                                    Email = DbUtils.GetString(reader, "Email"),
+                                    CreateDateTime = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
                                 },
                             });
                         }
@@ -64,7 +67,7 @@ namespace Koi.Repositories
                     cmd.CommandText = @"
                SELECT g.Id, g.GroupName, g.GroupDesc, g.CategoryId, g.UserId,
                       u.FirebaseUserId, u.FName, u.LName, u.Email, u.CreateDateTime AS UserProfileDateCreated
-                 FROM Group g
+                 FROM [Group] g
                       JOIN UserProfile u ON g.UserId = u.Id
                  WHERE p.Id = @Id";
                     DbUtils.AddParameter(cmd, "@Id", id);
@@ -107,10 +110,11 @@ namespace Koi.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO Group (
+                        INSERT INTO [Group] (
                         GroupName,
                         GroupDesc,
-                        CategoryId
+                        CategoryId,
+                        UserId
                         )
                         
                         OUTPUT INSERTED.ID
@@ -118,12 +122,14 @@ namespace Koi.Repositories
                         VALUES (
                         @GroupName,
                         @GroupDesc,
-                        @CategoryId)
+                        @CategoryId,
+                        @UserId)
                     ";
 
                     DbUtils.AddParameter(cmd, "@GroupName", group.GroupName);
                     DbUtils.AddParameter(cmd, "@GroupDesc", group.GroupDesc);
                     DbUtils.AddParameter(cmd, "@CategoryId", group.CategoryId);
+                    DbUtils.AddParameter(cmd, "@UserId", group.UserId);
                     group.Id = (int)cmd.ExecuteScalar();
                 }
             }
@@ -135,15 +141,17 @@ namespace Koi.Repositories
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"UPDATE Group
+                    cmd.CommandText = @"UPDATE [Group]
                                        SET GroupName = @GroupName,
                                            GroupDesc = @GroupDesc,
                                            CategoryId = @CategoryId,
+                                           UserId = @UserId
                                        WHERE Id = @Id";
 
                     DbUtils.AddParameter(cmd, "@GroupName", group.GroupName);
                     DbUtils.AddParameter(cmd, "@GroupDesc", group.GroupDesc);
                     DbUtils.AddParameter(cmd, "@CategoryId", group.CategoryId);
+                    DbUtils.AddParameter(cmd, "@UserId", group.UserId); 
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -156,7 +164,7 @@ namespace Koi.Repositories
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "DELETE FROM Group WHERE Id = @Id";
+                    cmd.CommandText = "DELETE FROM [Group] WHERE Id = @Id";
                     DbUtils.AddParameter(cmd, "@id", id);
                     cmd.ExecuteNonQuery();
                 }

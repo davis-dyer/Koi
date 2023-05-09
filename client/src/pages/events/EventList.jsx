@@ -15,7 +15,7 @@ const EventList = () => {
   return (
     <div>
       {events.map(i => 
-        <div>{i.Title}</div>
+        <h2 className="mt-10">{i.title}</h2>
       )}
     </div>
   );

@@ -15,7 +15,7 @@ const EventContainer = () => {
             <EventCard />
         </section>
         <section className="">
-            <EventList /* searchTermState={searchTerms} */ />
+            <EventList />
         </section>
         <section className="">
             <CreateEvent />

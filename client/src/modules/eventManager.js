@@ -11,7 +11,7 @@ export const getAllEvents = (usePagination, increment, offset) => {
     }
     }).then((res) => res.json())
   })
-};
+}; 
 
 export const addEvent = (event) => {
   return getToken().then(token => {

@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import EventList from './EventList'
 import { addEvent } from '../../modules/eventManager'
 import { getAllCategories } from '../../modules/categoryManager'
+import { getAllGroups } from '../../modules/groupManger'
+import { me } from '../../modules/authManager'
+
 
 const CreateEvent = () => {
 
@@ -12,18 +15,60 @@ const CreateEvent = () => {
     //timestamp: datetime.toDateString()
 
     const navigate = useNavigate()
+    const [user, setUser] = useState({})
+    const emptyEvent = {
+        title: '',
+        desc: '',
+        location: '',
+        eventDate: '',
+        categoryId: 1,
+        groupId: 1
+    };
+
+    const [event, setEvent] = useState(emptyEvent);
+
     const [title, setTitle] = useState();
     const [categoryId, setCategoryId] = useState();
+    const [groupId, setGroupId] = useState();
     const [eventDate, setEventDate] = useState();
     const [location, setLocation] = useState();
     const [description, setDescription] = useState();
     const [categories, setCategories] = useState([]);
+    const [groups, setGroups] = useState([]);
+
+
+    
+    const getData = () => {
+        getAllCategories().then(data => setCategories(data));
+        getAllGroups().then(data => setGroups(data));
+        
+    };
 
     useEffect(() => {
-        getAllCategories().then(data => setCategories(data.categories))
+        me().then(setUser)
     }, [])
+
+    useEffect(() => {
+        getData()
+    }, [])
+
+
+    const handleInputChange = (evt) => {
+        const value = evt.target.value;
+        const key = evt.target.id;
+        const eventCopy = { ...event };
+        eventCopy[key] = value;
+        setEvent(eventCopy);
+    };
+
+    const handleSubmit = (evt) => {
+        evt.preventDefault();
+        addEvent(event).then(() => {
+            navigate(`/events`);
+        });
+    };
     
-    const submitPost = (e) => {
+    /* const submitPost = (e) => {
         e.preventDefault();
               const event = {
                 title,
@@ -31,10 +76,11 @@ const CreateEvent = () => {
                 eventDate,
                 description,
                 categoryId,
+                groupId
               }
     
         addEvent(event).then((eventData) => {navigate(`/event/${eventData.id}`)});
-    };
+    }; */
 
 
 
@@ -55,35 +101,49 @@ const CreateEvent = () => {
                         <form className="">
                             <fieldset className="mt-5">
                                 <label htmlFor="title">Event Title</label>
-                                <input type="text" id='title' name='title' placeholder='ex. Prayer Night' onChange={(e) => setTitle(e.target.value)} className='border border-gray-400 py-1 px-2 w-full' required />
+                                <input type="text" id='title' name='title' value={event.title} placeholder='ex. Prayer Night' onChange={handleInputChange} className='border border-gray-400 py-1 px-2 w-full' required />
                             </fieldset>
                             <fieldset className='mt-5'>
                                 <label htmlFor="description">Event Description</label>
-                                <textarea type="text" id='description' name='description' rows={3} cols={3} placeholder='Join us as we gather...' onChange={(e) => setDescription(e.target.value)} className='border border-gray-400 py-1 px-2 w-full' required />
+                                <textarea type="text" id='description' name='description' value={event.desc} rows={3} cols={3} placeholder='Join us as we gather...' onChange={handleInputChange} className='border border-gray-400 py-1 px-2 w-full' required />
                             </fieldset>
                             <fieldset className='mt-5'>
                                 <label htmlFor="location">Event Location</label>
-                                <textarea type="location" id='location' name='location' placeholder='The Well' onChange={(e) => setLocation(e.target.value)} className='border border-gray-400 py-1 px-2 w-full' required />
+                                <textarea type="location" id='location' name='location' value={event.location} placeholder='The Well' onChange={handleInputChange} className='border border-gray-400 py-1 px-2 w-full' required />
                             </fieldset>
                             <fieldset className='mt-5'>
                                 <label htmlFor="eventDate">Event Date</label>
-                                <input type="date" id='eventDate' name='eventDate'  onChange={(e) => setEventDate(e.target.value)} className='border border-gray-400 py-1 px-2 w-full' required />
+                                <input type="date" id='eventDate' name='eventDate' value={event.eventDate}  onChange={handleInputChange} className='border border-gray-400 py-1 px-2 w-full' required />
                             </fieldset>
-                            {/* <fieldset className='mt-5'>
+                            <fieldset className='mt-5'>
                                 <label htmlFor="categoryId" className="category">Category</label>
                                 <select
                                     id='category'
-                                    onChange={(e) => setCategoryId(e.target.value)}
+                                    onClick={(e) => {
+                                        handleInputChange(e)
+                                    }}
                                     className='border border-gray-400 py-1 px-2 w-full' required
                                 >
-                                    {categories.map((category) => <option value={category.id} key={`addpostcategory--${category.id}`}>{category.Type}</option>)}
+                                    {categories.map((category) => <option value={category.id} key={`addpostcategory--${category.id}`} name={category.type}>{category.type}</option>)}
                                 </select>
-                            </fieldset> */}
+                            </fieldset>
+                            <fieldset className='mt-5'>
+                                <label htmlFor="groupId" className="group">Group</label>
+                                <select
+                                    id='group'
+                                    onClick={(e) => {
+                                        handleInputChange(e)
+                                    }}
+                                    className='border border-gray-400 py-1 px-2 w-full' required
+                                >
+                                    {groups.map((j) => <option value={j.id} key={`addgroupId--${j.id}`} name={j.groupName}>{j.groupName}</option>)}
+                                </select>
+                            </fieldset>
                             <fieldset className='mt-5'>
                                 <button
                                     type='submit'
                                     className='w-full bg-purple-500 py-3 text-center text-white'
-                                    onClick={submitPost}
+                                    onClick={handleSubmit}
                                 >Create Request</button>
                             </fieldset>
                         </form>
