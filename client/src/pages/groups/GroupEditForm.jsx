@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { getAllCategories } from '../../modules/categoryManager'
-import { editGroup } from '../../modules/groupManger'
+import { editGroup, getGroup } from '../../modules/groupManger'
 import { me } from '../../modules/authManager'
 
 const GroupEditForm = () => {
@@ -19,6 +19,8 @@ const GroupEditForm = () => {
             categoryId: 1,      
     })
 
+    const { groupId } = useParams()
+
 
     const [categories, setCategories] = useState([]);
     
@@ -34,6 +36,10 @@ const GroupEditForm = () => {
     useEffect(() => {
         getData()
     }, [])
+
+    useEffect(() => {
+        getGroup(groupId).then(grp => setGroup(grp));
+    }, []);
 
 
     const handleInputChange = (evt) => {
