@@ -11,7 +11,18 @@ export const getAllEvents = (usePagination, increment, offset) => {
     }
     }).then((res) => res.json())
   })
-}; 
+};
+
+export const getAllEventList = () => {
+  return getToken().then((token) => {
+      return fetch(`${_apiUrl}`, {
+          method: "GET",
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
+      }).then((res) => res.json());
+  })
+};
 
 export const addEvent = (event) => {
   return getToken().then(token => {

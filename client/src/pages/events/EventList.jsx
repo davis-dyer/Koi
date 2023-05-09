@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { getAllEvents } from "../../modules/eventManager";
+import { getAllEventList } from "../../modules/eventManager";
 
 const EventList = () => {
   const [events, setEvents] = useState([]);
 
   const getEvents = () => {
-    getAllEvents().then(events => setEvents(events));
+    getAllEventList().then(evt => setEvents(evt));
   };
 
   useEffect(() => {
-    getEvents();
+    getEvents()
   }, []);
 
   return (
     <div>
-      {events.map(i => 
-        <h2 className="mt-10">{i.title}</h2>
-      )}
+      {events.map((i) => ( 
+        <ul>
+          <li className="mt-10" key={i.id}>{i.title}</li>
+          <li className="mt-10" key={i.id}>{i.desc}</li>
+        </ul>
+      ))}
     </div>
   );
 }

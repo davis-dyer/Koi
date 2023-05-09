@@ -14,7 +14,7 @@ const EventContainer = () => {
         <section className="">
             <EventCard />
         </section>
-        <section className="">
+        <section className="m-16">
             <EventList />
         </section>
         <section className="">

@@ -1,4 +1,3 @@
-import Hero3 from '../assets/hero-5.jpg';
 import Nash from '../assets/nashville.jpg';
 import Gather from '../assets/gathering.jpg';
 import Park from '../assets/parkpp.jpg';
