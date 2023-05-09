@@ -19,8 +19,16 @@ export const getAllEventList = () => {
           method: "GET",
           headers: {
               Authorization: `Bearer ${token}`,
-          },
-      }).then((res) => res.json());
+            },
+          }).then((resp) => {
+            if (resp.ok) {
+              return resp.json();
+            } else {
+              throw new Error(
+                "An unknown error occurred while trying to get categories.",
+              );
+          }
+      });
   })
 };
 

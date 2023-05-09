@@ -12,6 +12,8 @@ import Event from "../pages/events/Event";
 import Profile from "../pages/Profile";
 
 export default function ApplicationViews({ isLoggedIn }) {
+
+
   return (
     <main>
       <Routes>
@@ -23,7 +25,7 @@ export default function ApplicationViews({ isLoggedIn }) {
           <Route path="events" element={<EventContainer />} />
           <Route path="events/:id" element={<Event />} />
           <Route path="groups" element={<GroupContainer />} />
-          <Route path="groups/:id" element={<GroupDetails />} />
+          <Route path="groups/:groupId" element={<GroupDetails />} />
           <Route path="about" element={<About />} />
           <Route path="profile" element={<Profile />} />
 

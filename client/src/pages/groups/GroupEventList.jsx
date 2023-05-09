@@ -44,10 +44,6 @@ useEffect(() => {
           <p className='text-2xl font-semibold capitalize text-headingColor relative before:absolute before:round-lg before:content before:w-20 before:h-1 before:-bottom-2 before:left-0 before:bg-gradient-to-tr from-blue-400 to-blue-600 transition-all ease-in-out duration-100'>
             Group List
           </p>
-          <button
-            className='w-auto h-auto p-2 rounded-lg bg-blue-300 hover:bg-blue-500 cursor-pointer transition-all duration-100 ease-in-out hover:shadow-lg flex items-center justify-center text-headingColor text-semibold'
-            onClick={<CreateGroup />}
-          >Add Your Group</button>
         </motion.div>
       </section>
       
@@ -56,14 +52,14 @@ useEffect(() => {
           <div className="hidden md:flex gap-3 items-center">
             <motion.div
               whileTap={{ scale: 0.75 }}
-              className="w-8 h-8 rounded-lg bg-purple-300 hover:bg-purple-500 cursor-pointer transition-all duration-100 ease-in-out hover:shadow-lg flex items-center justify-center"
+              className="w-8 h-8 rounded-lg bg-blue-300 hover:bg-blue-500 cursor-pointer transition-all duration-100 ease-in-out hover:shadow-lg flex items-center justify-center"
               onClick={() => setScrollValue(-200)}
             >
               <MdChevronLeft className="text-lg text-white" />
             </motion.div>
             <motion.div
               whileTap={{ scale: 0.75 }}
-              className="w-8 h-8 rounded-lg bg-purple-300 hover:bg-purple-500 cursor-pointer transition-all duration-100 ease-in-out hover:shadow-lg flex items-center justify-center"
+              className="w-8 h-8 rounded-lg bg-blue-300 hover:bg-blue-500 cursor-pointer transition-all duration-100 ease-in-out hover:shadow-lg flex items-center justify-center"
               onClick={() => setScrollValue(200)}
             >
               <MdChevronRight className="text-lg text-white" />

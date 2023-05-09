@@ -69,7 +69,7 @@ namespace Koi.Repositories
                       u.FirebaseUserId, u.FName, u.LName, u.Email, u.CreateDateTime AS UserProfileDateCreated
                  FROM [Group] g
                       JOIN UserProfile u ON g.UserId = u.Id
-                 WHERE p.Id = @Id";
+                 WHERE g.Id = @Id";
                     DbUtils.AddParameter(cmd, "@Id", id);
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {

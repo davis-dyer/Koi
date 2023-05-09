@@ -7,12 +7,12 @@ const Event = ({ data }) => {
     <div>
       {data && data.length > 0 ? (
        data.map((item) => (
-        <Card>
-          <CardBody key={item?.id}>
-            <h3>{item?.title}</h3>
+        <div>
+          <div key={item?.id}>
+            <p>{item?.title}</p>
             <p>{item?.description}</p>
-          </CardBody>
-        </Card>
+          </div>
+        </div>
         ))
       ) : (
         <div className="w-full flex flex-col items-center justify-center">

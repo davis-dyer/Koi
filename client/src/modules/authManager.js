@@ -87,3 +87,15 @@ export const onLoginStatusChange = (onLoginStatusChangeHandler) => {
     onLoginStatusChangeHandler(!!user);
   });
 };
+
+export const getAllUserProfiles = () => {
+  return getToken().then(token => {
+      return fetch(_apiUrl, {
+          method: "GET",
+          headers: {
+              Authorization: `Bearer ${token}`,
+          }
+      })
+          .then(res => res.json())
+  })
+};

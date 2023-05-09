@@ -21,6 +21,17 @@ export const getAllGroups = () => {
     });
   };
 
+  export const getGroup = (id) => {
+    return getToken().then((token) => {
+        return fetch(`${_apiUrl}/${id}`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }).then((res) => res.json());
+    })
+};
+
   export const addGroup = (group) => {
     return getToken().then(token => {
       return fetch(_apiUrl, {

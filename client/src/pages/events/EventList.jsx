@@ -6,7 +6,7 @@ const EventList = () => {
   const [events, setEvents] = useState([]);
 
   const getEvents = () => {
-    getAllEvents().then(evt => setEvents(evt));
+    getAllEventList().then(evt => setEvents(evt));
   };
 
   useEffect(() => {
