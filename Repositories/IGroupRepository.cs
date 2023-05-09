@@ -9,6 +9,6 @@ namespace Koi.Repositories
         Group GetById(int id);
         public void Add(Group group);
         public void Delete(int GroupId);
-        public void Edit(Group group);
+        public void Update(Group group);
     }
 }

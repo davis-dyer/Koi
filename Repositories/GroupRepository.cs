@@ -69,7 +69,7 @@ namespace Koi.Repositories
                       u.FirebaseUserId, u.FName, u.LName, u.Email, u.CreateDateTime AS UserProfileDateCreated
                  FROM [Group] g
                       JOIN UserProfile u ON g.UserId = u.Id
-                 WHERE g.Id = @Id";
+                 WHERE g.Id = @id";
                     DbUtils.AddParameter(cmd, "@Id", id);
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -134,7 +134,7 @@ namespace Koi.Repositories
                 }
             }
         }
-        public void Edit(Group group)
+        public void Update(Group group)
         {
             using (var conn = Connection)
             {
@@ -146,12 +146,12 @@ namespace Koi.Repositories
                                            GroupDesc = @GroupDesc,
                                            CategoryId = @CategoryId,
                                            UserId = @UserId
-                                       WHERE Id = @Id";
-
+                                       WHERE Id = @id";
+                    DbUtils.AddParameter(cmd, "@id", group.Id);
                     DbUtils.AddParameter(cmd, "@GroupName", group.GroupName);
                     DbUtils.AddParameter(cmd, "@GroupDesc", group.GroupDesc);
                     DbUtils.AddParameter(cmd, "@CategoryId", group.CategoryId);
-                    DbUtils.AddParameter(cmd, "@UserId", group.UserId); 
+                    DbUtils.AddParameter(cmd, "@UserId", group.UserId);
                     cmd.ExecuteNonQuery();
                 }
             }

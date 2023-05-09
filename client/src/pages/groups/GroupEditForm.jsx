@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getAllCategories } from '../../modules/categoryManager'
-import { addGroup } from '../../modules/groupManger'
+import { editGroup } from '../../modules/groupManger'
 import { me } from '../../modules/authManager'
 
-const CreateGroup = () => {
+const GroupEditForm = () => {
 
     //const datetime = new Date()
 
     const navigate = useNavigate()
     const [user, setUser] = useState({})
 
-    const emptyGroup = {
-        groupName: '',
-        groupDesc: '',
-        categoryId: 1,
-    };        
+    const [group, setGroup] = useState({
+        
+            id: 0,
+            groupName: '',
+            groupDesc: '',
+            categoryId: 1,      
+    })
 
-    const [group, setGroup] = useState(emptyGroup);
+
     const [categories, setCategories] = useState([]);
     
     const getData = () => {
@@ -44,8 +46,8 @@ const CreateGroup = () => {
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
-        addGroup(group).then(() => {
-            navigate(`/`);
+        editGroup(group).then(() => {
+            navigate(`/groups`);
         });
     };
 
@@ -67,30 +69,18 @@ const CreateGroup = () => {
                             <fieldset className="mt-5">
                                 <label htmlFor="">Group Name</label>
                                 <input type="text" name="groupName" id='groupName' value={group.groupName} 
-                                placeholder='First Baptist Volunteers' onChange={handleInputChange} className='border border-gray-400 py-1 px-2 w-full' required />
+                                placeholder='First Baptist Volunteers' onChange={(e) => handleInputChange(e)} className='border border-gray-400 py-1 px-2 w-full' required />
                             </fieldset>
                             <fieldset className='mt-5'>
                                 <label htmlFor="">Group Description</label>
-                                <textarea id='groupDesc' type="text" name='groupDesc' value={group.groupDesc} rows={3} cols={3} placeholder='We are members of First Baptist and here to help...' onChange={handleInputChange} className='border border-gray-400 py-1 px-2 w-full' required />
-                            </fieldset>
-                            <fieldset className='mt-5'>
-                                <label htmlFor="categoryId" className="category">Category</label>
-                                <select
-                                    id='category'
-                                    onClick={(e) => {
-                                        handleInputChange(e)
-                                    }}
-                                    className='border border-gray-400 py-1 px-2 w-full' required
-                                >
-                                    {categories.map((category) => <option value={category.id} key={`addpostcategory--${category.id}`} name={category.type}>{category.type}</option>)}
-                                </select>
+                                <textarea id='groupDesc' type="text" name='groupDesc' value={group.groupDesc} rows={3} cols={3} placeholder='We are members of First Baptist and here to help...' onChange={(e) => handleInputChange(e)} className='border border-gray-400 py-1 px-2 w-full' required />
                             </fieldset>
                             <fieldset className='mt-5'>
                                 <button
                                     type='submit'
                                     className='w-full bg-purple-500 py-3 text-center text-white'
                                     onClick={handleSubmit}
-                                >Create Community Group</button>
+                                >Edit Your Group</button>
                             </fieldset>
                         </form>
                     </div>
@@ -100,4 +90,4 @@ const CreateGroup = () => {
     )
 }
 
-export default CreateGroup 
+export default GroupEditForm 

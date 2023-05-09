@@ -1,6 +1,6 @@
-import { getToken } from "./authManager"
+import { getToken } from "./authManager";
 
-const _apiUrl = "/api/group"
+const _apiUrl = "/api/group";
 
 export const getAllGroups = () => {
     return getToken().then((token) => {
@@ -32,7 +32,7 @@ export const getAllGroups = () => {
     })
 };
 
-  export const addGroup = (group) => {
+  export const addGroup = (grp) => {
     return getToken().then(token => {
       return fetch(_apiUrl, {
         method: "POST",
@@ -40,12 +40,12 @@ export const getAllGroups = () => {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(group),
+        body: JSON.stringify(grp),
       })
     })
   };
   
-  export const deleteEvent = (groupId) => {
+  export const deleteGroup = (groupId) => {
     return getToken().then(token => {
         return fetch(`${_apiUrl}/${groupId}`, {
             method: "DELETE",
@@ -57,14 +57,15 @@ export const getAllGroups = () => {
   }
   
   
-  export const editGroup = (oldName, eventName) => {
+  export const editGroup = (grp) => {
     return getToken().then(token => {
-        return fetch(`${_apiUrl}?oldName=${oldName}&newName=${eventName}`, {
+        return fetch(`${_apiUrl}/${grp.id}`, {
             method: "PUT",
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json"
-            }
-        })
+              },
+              body: JSON.stringify(grp),
+            })
     })
   }

@@ -66,7 +66,7 @@ namespace Koi.Controllers
                     return BadRequest();
                 }
 
-                _groupRepository.Edit(group);
+                _groupRepository.Update(group);
                 return NoContent();
             }
 

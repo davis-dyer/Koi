@@ -64,23 +64,9 @@ const CreateEvent = () => {
     const handleSubmit = (evt) => {
         evt.preventDefault();
         addEvent(event).then(() => {
-            navigate(`/events`);
+            navigate(`/`);
         });
     };
-    
-    /* const submitPost = (e) => {
-        e.preventDefault();
-              const event = {
-                title,
-                location,
-                eventDate,
-                description,
-                categoryId,
-                groupId
-              }
-    
-        addEvent(event).then((eventData) => {navigate(`/event/${eventData.id}`)});
-    }; */
 
 
 

@@ -10,6 +10,7 @@ import GroupDetails from "../pages/groups/GroupDetails";
 import About from "../pages/about/About";
 import Event from "../pages/events/Event";
 import Profile from "../pages/Profile";
+import GroupEditForm from "../pages/groups/GroupEditForm";
 
 export default function ApplicationViews({ isLoggedIn }) {
 
@@ -26,6 +27,7 @@ export default function ApplicationViews({ isLoggedIn }) {
           <Route path="events/:id" element={<Event />} />
           <Route path="groups" element={<GroupContainer />} />
           <Route path="groups/:groupId" element={<GroupDetails />} />
+          <Route path="groups/edit/:groupId" element={<GroupEditForm />} />
           <Route path="about" element={<About />} />
           <Route path="profile" element={<Profile />} />
 
