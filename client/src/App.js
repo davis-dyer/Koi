@@ -1,4 +1,3 @@
-import { Spinner } from 'reactstrap';
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import Header from "./components/Header";
@@ -21,10 +20,6 @@ function App() {
       setUserProfile(null);
     }
   }, [isLoggedIn]);
-
-  if (isLoggedIn === null) {
-    return <Spinner className="app-spinner dark" />;
-  }
 
   return (
     <Router>

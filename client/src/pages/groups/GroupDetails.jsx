@@ -1,18 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Table } from "reactstrap";
-import { me } from "../modules/authManager";
 
 
-const Profile = () => {
+const GroupDetails = () => {
     const { id } = useParams();
-    const [person, setPerson] = useState({});
-
-
-
-    useEffect(() => {
-        me().then(setPerson)
-    }, [])
+    const [user, setUser] = useState({});
 
 
     return (
@@ -20,11 +13,20 @@ const Profile = () => {
             <Table>
                 <tbody>
                     <tr>
+                        <th>Name</th>
+                        <td>{user.fName}</td>
+                        <td>{user.lName}</td>
+                    </tr>
+                    <tr>
                         <img src="https://www.shutterstock.com/image-vector/default-avatar-profile-social-media-260nw-1920331226.jpg"></img>
                     </tr>
                     <tr>
                         <th>Email</th>
-                        <td>{person.email}</td>
+                        <td>{user.email}</td>
+                    </tr>
+                    <tr>
+                        <th>Creation Date</th>
+                        <td>{user.createDateTime}</td>
                     </tr>
                 </tbody>
             </Table>
@@ -32,4 +34,4 @@ const Profile = () => {
     )
 }
 
-export default Profile
+export default GroupDetails
