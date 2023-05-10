@@ -147,6 +147,7 @@ namespace Koi.Repositories
                                            CategoryId = @CategoryId,
                                            UserId = @UserId
                                        WHERE Id = @id";
+
                     DbUtils.AddParameter(cmd, "@id", group.Id);
                     DbUtils.AddParameter(cmd, "@GroupName", group.GroupName);
                     DbUtils.AddParameter(cmd, "@GroupDesc", group.GroupDesc);

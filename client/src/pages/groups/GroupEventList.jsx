@@ -5,17 +5,13 @@ import {MdChevronLeft} from 'react-icons/md'
 import {MdChevronRight} from 'react-icons/md'
 import { Link, useNavigate } from 'react-router-dom'
 import GroupCard from './GroupCard'
-import CreateGroup from './CreateGroup'
 import { getAllGroups } from '../../modules/groupManger'
 
 const GroupEventList = () => {
 
   const navigate = useNavigate()
 
-  const [communities, setCommunities] = useState([])
-  const [location, setEventLocation] = useState([])
-  const [filteredCommunities, setFiltered] = useState([])
-  const [selectedCategory, setSelectedCategory] = useState()
+
   const [scrollValue, setScrollValue] = useState(0);
 
   const [groups, setGroups] = useState([])

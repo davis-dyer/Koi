@@ -25,9 +25,7 @@ namespace Koi.Repositories
                SELECT e.Id, e.Title, e.Location, e.EventDate, e.Description, e.CreatedAt, e.GroupId, e.UserId,
                       u.FirebaseUserId, u.FName, u.LName, u.Email, u.CreateDateTime AS UserProfileDateCreated
                  FROM Event e
-                      JOIN UserProfile u ON e.UserId = u.Id
-                WHERE e.EventDate <= SYSDATETIME()
-             ORDER BY e.EventDate DESC
+                      LEFT JOIN UserProfile u ON e.UserId = u.Id
             ";
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
