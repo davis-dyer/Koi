@@ -6,8 +6,6 @@ import { me } from '../../modules/authManager'
 
 const GroupEditForm = () => {
 
-    //const datetime = new Date()
-
     const navigate = useNavigate()
     const [user, setUser] = useState({})
 

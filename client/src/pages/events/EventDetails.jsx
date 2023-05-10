@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { deleteGroup, getAllGroups, getGroup } from "../../modules/groupManger";
 import { getAllUserProfiles, me } from "../../modules/authManager";
 import { BsThreeDots } from "react-icons/bs";
 import Avatar from '../../assets/avatar.png'
-import Event1 from '../../assets/KOI.png'
-import { getAllEventList } from "../../modules/eventManager";
+import Event1 from '../../assets/parkpp.jpg'
+import { deleteEvent, getAllEventList } from "../../modules/eventManager";
 
 
 const GroupDetails = () => {
@@ -41,8 +40,8 @@ const GroupDetails = () => {
 
   const deleteRequest = (e) => {
     e.preventDefault();
-    deleteGroup(eventId)
-        .then(() => navigate(`/groups`))
+    deleteEvent(eventId)
+        .then(() => navigate(`/events`))
   };
 
 

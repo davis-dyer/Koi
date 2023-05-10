@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import davis from '../assets/profile-pic.png'
+import KOI from '../assets/KOI.png'
 import SocialMediaIcons from "../utils/SocialMediaIcons";
 import useMediaQuery from "../views/useMediaQuery";
 import { motion } from "framer-motion";
@@ -15,7 +15,7 @@ const HomeAboutContainer = () => {
 
             <section
                 id="home"
-                className="md:flex md:justify-between md:items-center gap-16 md:h-full py-10"
+                className="mt-10 md:flex md:justify-between md:items-center gap-16 md:h-full py-10 bg-slate-400"
             >
                 {/* IMAGE SECTION */}
                 <div className="basis-3/5 z-10 mt-16 md:mt-32 flex justify-center md:order-2">
@@ -27,14 +27,14 @@ const HomeAboutContainer = () => {
                             <img
                                 alt="profile"
                                 className="hover:filter hover:saturate-200 transition duration-500 z-10 w-full max-w-[400px] md:max-w-[600px] rounded-lg"
-                                src={davis}
+                                src={KOI}
                             />
                         </div>
                     ) : (
                         <img
                             alt="profile"
                             className="z-10 w-full max-w-[400px] md:max-w-[600px] rounded-lg"
-                            src={davis}
+                            src={KOI}
                         />
                     )}
                 </div>
@@ -53,18 +53,17 @@ const HomeAboutContainer = () => {
                         }}
                     >
                         <p className="text-6xl font-playfair z-10 text-center md:text-start">
-                            Davis {""}
+                            What is {""}
                             <span
                                 className="xs:relative xs:text-deep-blue xs:font-semibold z-20 xs:before:content-brush
               before:absolute before:-left-[25px] before:-top-[70px] before:z-[-1]"
                             >
-                                Dyer
+                                Koi?
                             </span>
                         </p>
 
                         <p className="mt-10 mb-7 text-sm text-center md:text-start">
-                            Adipiscing arcu, in aliquam fringilla cursus. Elit arcu elementum
-                            viverra malesuada sem ac faucibus dolor. Sagittis scelerisque.
+                            Find out how you can make life-changing community.
                         </p>
                     </motion.div>
 
@@ -83,14 +82,12 @@ const HomeAboutContainer = () => {
                         <div
                             className="bg-gradient-rainblue text-deep-blue rounded-sm py-3 px-7 font-semibold
               hover:bg-blue hover:text-white transition duration-500"
-                            /* onClick={() => setSelectedPage("contact")} */
                             href="#contact"
                         >
                             Contact Me
                         </div>
                         <div
                             className="rounded-r-sm bg-gradient-rainblue py-0.5 pr-0.5"
-                            /* onClick={() => setSelectedPage("contact")} */
                             href="#contact"
                         >
                             <div className="bg-deep-blue hover:text-red transition duration-500 w-full h-full flex items-center justify-center px-10 font-playfair">

@@ -75,7 +75,7 @@ const CreateEvent = () => {
         <div className='min-h-screen py-20'>
             <div className="container mx-auto">
                 <div className="flex flex-col lg:flex-row w-10/12 bg-white rounded-xl mx-auto showdow-lg overflow-hidden">
-                    <div className="w-full lg:w-1/2 flex flex-col items-center justify-center bg-purple-900 p-12">
+                    <div className="w-full lg:w-1/2 flex flex-col items-center justify-center bg-blue-900 p-12">
                         <h2 className='text-white text-3xl mb-3'>Create an Event</h2>
                         <div>
                             <p className='text-white'>What event would you like to create?</p>
@@ -128,7 +128,7 @@ const CreateEvent = () => {
                             <fieldset className='mt-5'>
                                 <button
                                     type='submit'
-                                    className='w-full bg-purple-500 py-3 text-center text-white'
+                                    className='w-full bg-blue-500 py-3 text-center text-white'
                                     onClick={handleSubmit}
                                 >Create Request</button>
                             </fieldset>

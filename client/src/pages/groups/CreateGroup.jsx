@@ -6,8 +6,6 @@ import { me } from '../../modules/authManager'
 
 const CreateGroup = () => {
 
-    //const datetime = new Date()
-
     const navigate = useNavigate()
     const [user, setUser] = useState({})
 
@@ -57,7 +55,7 @@ const CreateGroup = () => {
         <div className='min-h-screen py-20'>
             <div className="container mx-auto">
                 <div className="flex flex-col lg:flex-row w-10/12 bg-white rounded-xl mx-auto showdow-lg overflow-hidden">
-                    <div className="w-full lg:w-1/2 flex flex-col items-center justify-center bg-purple-900 p-12">
+                    <div className="w-full lg:w-1/2 flex flex-col items-center justify-center bg-blue-900 p-12">
                         <h2 className='text-white text-3xl mb-3'>Register Your Group</h2>
                     </div>
                     <div className="w-full lg:w-1/2 py-16 px-12">
@@ -88,7 +86,7 @@ const CreateGroup = () => {
                             <fieldset className='mt-5'>
                                 <button
                                     type='submit'
-                                    className='w-full bg-purple-500 py-3 text-center text-white'
+                                    className='w-full bg-blue-500 py-3 text-center text-white'
                                     onClick={handleSubmit}
                                 >Create Community Group</button>
                             </fieldset>

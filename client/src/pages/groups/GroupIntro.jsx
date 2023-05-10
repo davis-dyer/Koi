@@ -24,15 +24,6 @@ const GroupIntro = () => {
                     >Find Out More</button>
                 </div>
             </div>
-            {/* <div
-                className='w-full h-full absolute flex items-center justify-center gap-8 flex-wrap'
-            >
-                {communityData && communityData.map(n => (
-                    <div key={n.id} className='w-full h-full backdrop-blur-lg rounded-xl drop-shadow-xl flex items-center justify-center'>
-                        <img src={n.imgsrc} className='' alt='ice cream' />
-                    </div>
-                ))}
-            </div> */}
         </section>
     )
 }

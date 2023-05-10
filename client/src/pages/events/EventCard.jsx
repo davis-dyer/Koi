@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import NotFound from "../../assets/NotFound.svg";
 import { Link } from 'react-router-dom'
 import conflict from '../../assets/conflict.png'
-import nostalgia from '../../assets/Present.png'
 import dyernotes from '../../assets/dyernotes.png'
 import metaverse from '../../assets/metaverse.png'
 import N2F from '../../assets/note2faith.png'
